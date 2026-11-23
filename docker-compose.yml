@@ -1,0 +1,59 @@
+# ==============================================================================
+# ThreatLens - development stack (S2)
+# Qdrant (HNSW + sparse BM25, Query API >= 1.10) and PostgreSQL 16
+# Ports bound to 127.0.0.1 only: nothing is exposed on the local network.
+# Usage: cp .env.example .env  (fill POSTGRES_PASSWORD)  then  docker compose up -d
+# ==============================================================================
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.18.3
+    container_name: threatlens_qdrant
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${QDRANT_REST_PORT:-6333}:6333"   # REST + dashboard
+      - "127.0.0.1:${QDRANT_GRPC_PORT:-6334}:6334"   # gRPC
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      QDRANT__SERVICE__ENABLE_STATIC_CONTENT: "true"
+      QDRANT__LOG_LEVEL: INFO
+    networks:
+      - backend-net
+    healthcheck:
+      # The image has no curl: raw HTTP over bash /dev/tcp
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/6333 && printf \"GET /readyz HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n\" >&3 && grep -q \"200 OK\" <&3'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  db:
+    image: postgres:16-alpine
+    container_name: threatlens_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-threatlens}
+      # No default: compose refuses to start if the secret is missing from .env
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-threatlens}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-threatlens} -d ${POSTGRES_DB:-threatlens}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  qdrant_data:
+  postgres_data:
+
+networks:
+  backend-net:
+    driver: bridge
