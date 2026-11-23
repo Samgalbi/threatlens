@@ -9,10 +9,11 @@
 
 - **Nom du projet :** `ThreatLens`
 - **Membres de l'équipe :**
-  1. *[Nom Prénom]* — Lead Data / Retrieval (ingestion, Qdrant, évaluation)
-  2. *[Nom Prénom]* — Lead Backend / MLOps (FastAPI, SSE, CI/CD, Docker)
-  3. *[Nom Prénom]* — Lead Frontend / Infra (Next.js, Source Drawer, K8s) *(si trinôme)*
-- **Dépôt GitHub :** `https://github.com/<organisation>/threatlens`
+  1. **Samar Galbi** — Lead Data / Retrieval, coordination (ingestion, Qdrant, recherche hybride, reranker)
+  2. **Sahar Ayoub** — Lead Backend / MLOps (FastAPI, SSE, PostgreSQL, Docker)
+  3. **Rim Mhirsi** — Lead Frontend (Next.js, Source Drawer, carte ATT&CK, télémétrie)
+  4. **Wafa Manai** — Lead Évaluation / Qualité (CTIBench, Ragas, tests, CI/CD, Kubernetes)
+- **Dépôt GitHub :** `https://github.com/Samgalbi/threatlens` (public)
 - **Branche principale :** `main` (protégée, merge via PR + CI verte)
 
 ---
@@ -42,10 +43,10 @@
 | --- | --- | --- | --- |
 | MITRE ATT&CK Enterprise | v20.1 (bundle du 05/11/2026) | JSON STIX 2.1, 55 Mo | Corpus |
 | CAPEC | v3.9 | JSON STIX 2.1, 4,5 Mo | Corpus (pont CWE ↔ ATT&CK) |
-| CWE | version notée dans `data/MANIFEST.json` au téléchargement | XML | Corpus |
+| CWE | v5.0 (empreinte dans `data/MANIFEST.json`) | XML | Corpus |
 | CTIBench (AI4Sec, CC BY-NC-SA 4.0) | sha256 dans `data/MANIFEST.json` | TSV | **Golden Dataset, jamais indexé** |
 
-- **Volumétrie initiale (PoC S1-S3) :** 20 021 documents → **20 079 chunks** *(mesuré, hors CWE)* : 17 636 procedure examples, 842 logiciels, 750 chunks de techniques, 558 CAPEC, 178 groupes, 58 mitigations, 57 campagnes. Le catalogue CWE ajoutera environ un millier d'entrées (nombre exact produit par `ingest.py`).
+- **Volumétrie initiale (PoC S1-S3) :** 20 977 documents → **21 047 chunks** *(mesuré)* : 17 636 procedure examples, 968 CWE (CWE v5.0), 842 logiciels, 750 chunks de techniques, 558 CAPEC, 178 groupes, 58 mitigations, 57 campagnes. Ingestion complète en 37 min 30 s sur CPU, dont 93 % en embedding *(mesuré)*.
 - **Volumétrie cible en production :** environ 10⁶ chunks, avec la base NVD (plusieurs centaines de milliers de CVE) et les rapports CTI internes. Garde-fou : les CVE de CTIBench sont exclues du corpus, sinon fuite de la vérité terrain.
 - **Fréquence de mise à jour :** `[x] Batch` : ATT&CK semestriel plus releases « agiles », CWE et CAPEC trimestriel, NVD quotidien en cible. L'ingestion est idempotente (IDs UUID5 déterministes), donc une mise à jour = un upsert.
 
@@ -55,7 +56,7 @@
 
 - **Stratégie de chunking :** `[x] Structure-aware` (1 objet de connaissance = 1 chunk)
   - Chaque chunk commence par un **en-tête contextuel** : `[technique] T1059.001 PowerShell | tactics: execution | platforms: Windows, Linux, macOS`.
-  - Découpage aux frontières de phrase **seulement au-delà de 300 mots** (limite de 512 tokens du modèle) : 58 documents sur 20 021 sont concernés *(mesuré)*.
+  - Découpage aux frontières de phrase **seulement au-delà de 300 mots** (limite de 512 tokens du modèle) : 69 documents sur 20 977 sont concernés *(mesuré)*.
   - Les procedure examples sont des chunks à part : ce sont les phrases les plus proches d'un rapport réel.
   - Nettoyage : suppression des `(Citation: …)`, des liens markdown et des balises HTML.
   - *Benchmark S2 → S3 :* 300 mots (20 079 chunks) contre 120 mots (20 867 chunks, 630 documents découpés) *(mesuré)*, Recall@5 sur 10 questions.

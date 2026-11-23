@@ -41,12 +41,12 @@ Chaque réponse renvoie ses citations (`stix_id`, identifiant `T####` / `CWE-###
 | --- | --- | --- | --- |
 | [MITRE ATT&CK Enterprise](https://github.com/mitre-attack/attack-stix-data) | v20.1 | Corpus | [ATT&CK Terms of Use](https://attack.mitre.org/resources/legal-and-branding/terms-of-use/) |
 | [CAPEC](https://github.com/mitre/cti) | v3.9 | Corpus | Conditions d'utilisation MITRE |
-| [CWE](https://cwe.mitre.org/data/downloads.html) | notée dans `data/MANIFEST.json` | Corpus | Conditions d'utilisation MITRE |
+| [CWE](https://cwe.mitre.org/data/downloads.html) | v5.0 (empreinte dans `data/MANIFEST.json`) | Corpus | Conditions d'utilisation MITRE |
 | [CTIBench](https://huggingface.co/datasets/AI4Sec/cti-bench) | sha256 dans `data/MANIFEST.json` | Golden Dataset (jamais indexé) | CC BY-NC-SA 4.0 |
 
-Les fichiers complets ne sont pas commités : `scripts/download_data.py` les télécharge et écrit leurs empreintes sha256 dans `data/MANIFEST.json`. Un échantillon est commité dans `data/raw/sample/`.
+Les fichiers complets ne sont pas commités : `scripts/download_data.py` les télécharge et écrit leurs empreintes sha256 dans `data/MANIFEST.json`. Un échantillon est commité dans `data/raw/sample/`. L'échantillon `data/raw/sample/ctibench/` reste sous licence CC BY-NC-SA 4.0 (AI4Sec / CTIBench).
 
-Corpus mesuré (hors CWE) : **20 021 documents → 20 079 chunks**, dont 17 636 procedure examples.
+Corpus mesuré (`data/processed/ingest_report_threatlens_kb.json`) : **20 977 documents → 21 047 chunks**, dont 17 636 procedure examples et 968 CWE (CWE v5.0). 69 documents découpés. Ingestion complète en 37 min 30 s sur CPU, dont 93 % en embedding.
 
 > CTIBench : Alam, M. T., Bhusal, D., Nguyen, L., Rastogi, N. *CTIBench: A Benchmark for Evaluating LLMs in Cyber Threat Intelligence.* NeurIPS 2024 Datasets and Benchmarks Track.
 
@@ -55,7 +55,7 @@ Corpus mesuré (hors CWE) : **20 021 documents → 20 079 chunks**, dont 17 636 
 Prérequis : Python 3.11+, Docker Desktop (WSL 2), Git, Node 20 (S5).
 
 ```powershell
-git clone https://github.com/<organisation>/threatlens.git
+git clone https://github.com/Samgalbi/threatlens.git
 cd threatlens
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
@@ -95,9 +95,12 @@ data/raw/sample/         échantillon commité ; data/raw/* complet ignoré par 
 
 | Membre | Rôle | Périmètre |
 | --- | --- | --- |
-| *[Nom]* | Lead Data / Retrieval | Ingestion, Qdrant, évaluation CTIBench |
-| *[Nom]* | Lead Backend / MLOps | FastAPI, SSE, PostgreSQL, CI/CD, Docker |
-| *[Nom]* | Lead Frontend / Infra | Next.js, Source Drawer, Kubernetes |
+| Samar Galbi | Lead Data / Retrieval, coordination | Ingestion, Qdrant, recherche hybride, reranker |
+| Sahar Ayoub | Lead Backend / MLOps | FastAPI, SSE, PostgreSQL, Docker |
+| Rim Mhirsi | Lead Frontend | Next.js, Source Drawer, carte ATT&CK, télémétrie |
+| Wafa Manai | Lead Évaluation / Qualité | CTIBench, Ragas, tests, CI/CD, Kubernetes |
+
+Dépôt : https://github.com/Samgalbi/threatlens
 
 ## Conventions
 

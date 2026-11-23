@@ -1,7 +1,7 @@
 # Backlog Technique MoSCoW — ThreatLens
 ## User Stories et critères d'acceptation mesurables
 
-> Gabarit : `Seance_01_Ideation_Cadrage_RAG/templates/matrice_moscow_backlog.md`. Les US-01 à US-14 du gabarit sont conservées et adaptées. Les US-15 à US-19 sont propres à ThreatLens.
+> Gabarit : `Seance_01_Ideation_Cadrage_RAG/templates/matrice_moscow_backlog.md`. Les US-01 à US-14 du gabarit sont conservées et adaptées. Les US-15 à US-20 sont propres à ThreatLens.
 > Règle de priorisation : **le socle Must Have doit être vert avant toute innovation Should Have.**
 
 ---

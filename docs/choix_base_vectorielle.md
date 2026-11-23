@@ -14,4 +14,4 @@
 
 **Paramètres :** distance Cosine (embeddings normalisés), HNSW `m=16`, `ef_construct=100`. Index de payload `keyword` sur `category`, `tactics`, `platforms`, `external_id`, `source`, `related_ids`.
 
-**Mémoire estimée :** 20 079 vecteurs × 384 dimensions × 4 octets ≈ 31 Mo de vecteurs denses, plus le graphe HNSW (environ m × 2 liens × 4 octets par point, soit environ 2,6 Mo) et les payloads. Tout tient très largement dans 16 Go.
+**Mémoire estimée :** 21 047 vecteurs × 384 dimensions × 4 octets ≈ 32,3 Mo de vecteurs denses, plus le graphe HNSW (environ m × 2 liens × 4 octets par point, soit environ 2,7 Mo) et les payloads. Tout tient très largement dans 16 Go.
