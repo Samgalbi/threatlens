@@ -71,7 +71,7 @@ python scripts/ingest.py --recreate
 python scripts/search_test.py --query "steal web browser cookies to hijack sessions" --category technique
 ```
 
-Dashboard Qdrant : http://localhost:6333/dashboard
+Dashboard Qdrant : http://127.0.0.1:6333/dashboard
 
 Tests (hermétiques, sans réseau ni modèle) :
 
