@@ -6,7 +6,7 @@ Projet Fédérateur M2 AI-BD_BI — Polytech Intl, 2026-2027.
 
 | Séance | Statut |
 | --- | --- |
-| S1 — Cadrage | Fiche de cadrage, backlog MoSCoW, choix de la base vectorielle (`docs/`) |
+| S1 — Cadrage | Fiche de cadrage, backlog MoSCoW, choix de la base vectorielle (`docs/`) · [Pitch S1](docs/pitch_s1.md) |
 | S2 — Ingestion | Docker Compose, `scripts/ingest.py`, `scripts/search_test.py` |
 | S3 à S7 | À venir |
 

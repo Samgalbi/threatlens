@@ -6,7 +6,104 @@
 
 ---
 
-## 1. MUST HAVE (livraison S7)
+## 1. Vue d'ensemble
+
+```mermaid
+flowchart LR
+    subgraph M["MUST · 8 stories · livraison S7"]
+        direction TB
+        m1["US-01 Ingestion et chunking"]
+        m2["US-02 Index HNSW Qdrant"]
+        m3["US-03 Hybride + reranker"]
+        m4["US-04 API FastAPI + Pydantic v2"]
+        m5["US-05 Streaming SSE + citations"]
+        m6["US-06 Interface + Source Drawer"]
+        m7["US-07 Tests + CI/CD"]
+        m8["US-08 Docker multi-stage"]
+    end
+    subgraph S["SHOULD · 7 stories · forte valeur"]
+        direction TB
+        s1["US-09 Tracing par étape"]
+        s2["US-11 Évaluation CTIBench + Ragas"]
+        s3["US-15 Baseline sans RAG"]
+        s4["US-16 Requête FR vers EN"]
+        s5["US-17 GraphRAG 1 saut"]
+        s6["US-18 Masquage PII"]
+        s7["US-20 Plan de protection"]
+    end
+    subgraph C["COULD · 4 stories · différenciateurs"]
+        direction TB
+        c1["US-12 Kubernetes"]
+        c2["US-19 Carte ATT#amp;CK"]
+        c3["US-10 Cache Redis"]
+        c4["US-13 Routage agentique"]
+    end
+    subgraph W["WON'T · hors périmètre"]
+        direction TB
+        w1["Fine-tuning d'un LLM"]
+        w2["PDF multimodaux"]
+        w3["SaaS, mobile"]
+        w4["Actions automatiques"]
+    end
+    M ~~~ S ~~~ C ~~~ W
+
+    classDef done fill:#EAF3DE,stroke:#3B6D11,color:#173404
+    class m1,m2 done
+    style M fill:#FCEBEB,stroke:#A32D2D,color:#501313
+    style S fill:#FAEEDA,stroke:#854F0B,color:#412402
+    style C fill:#E6F1FB,stroke:#185FA5,color:#042C53
+    style W fill:#F1EFE8,stroke:#5F5E5A,color:#2C2C2A
+```
+
+<sub>Cases vertes : stories livrées (S2).</sub>
+
+## 2. Feuille de route par séance
+
+```mermaid
+flowchart LR
+    S1["S1 Cadrage<br/>fiche, backlog, repo"] --> S2["S2 Ingestion<br/>US-01, US-02"]
+    S2 --> S3["S3 RAG hybride<br/>US-03, 09, 11, 15, 16, 17"]
+    S3 --> S4["S4 Backend<br/>US-04, 05, 18, 20"]
+    S4 --> S5["S5 Frontend<br/>US-06, 19"]
+    S5 --> S6["S6 Qualité<br/>US-07"]
+    S6 --> S7["S7 Production<br/>US-08, 12"]
+
+    classDef done fill:#EAF3DE,stroke:#3B6D11,color:#173404
+    classDef todo fill:#F1EFE8,stroke:#5F5E5A,color:#2C2C2A
+    class S1,S2 done
+    class S3,S4,S5,S6,S7 todo
+```
+
+## 3. Synthèse
+
+| Priorité | ID | User story | Critère clé (mesurable) | Séance | Statut |
+| :-: | :-: | :--- | :--- | :-: | :-: |
+| 🟥 Must | US-01 | Ingestion et chunking structuré | 21 047 chunks, payload complet, ré-ingestion idempotente (testée) | S2 | ✅ |
+| 🟥 Must | US-02 | Index HNSW dense + BM25 dans Qdrant | Recherche 11–23 ms ; upsert par batch < 50 ms (à remesurer) | S2 | ✅ |
+| 🟥 Must | US-03 | Hybride RRF + reranker Top-20 → Top-5 | Recall@5 ≥ 80 % sur CTIBench | S3 | ⏳ |
+| 🟥 Must | US-04 | API FastAPI + Pydantic v2 | HTTP 422 sur entrée invalide, Swagger complet | S4 | ⏳ |
+| 🟥 Must | US-05 | Streaming SSE avec citations | TTFT < 800 ms, historique PostgreSQL | S4 / S5 | ⏳ |
+| 🟥 Must | US-06 | Interface + Source Drawer | Badges cliquables, bouton Stop, zéro rechargement | S5 | ⏳ |
+| 🟥 Must | US-07 | Tests + CI/CD | Suite < 3 s, couverture ≥ 80 %, CI verte | S6 | ⏳ |
+| 🟥 Must | US-08 | Docker multi-stage | Image backend < 350 Mo, USER 10001 | S7 | ⏳ |
+| 🟧 Should | US-11 | Évaluation CTIBench + Ragas | Faithfulness ≥ 0,85, résultats versionnés | S3 | ⏳ |
+| 🟧 Should | US-15 | Baseline sans RAG | Gain publié face à 22,9 % et au LLM seul | S3 | ⏳ |
+| 🟧 Should | US-16 | Requête FR → EN | Comparée à un modèle multilingue sur 100 CVE | S3 / S4 | ⏳ |
+| 🟧 Should | US-17 | GraphRAG 1 saut | Gain en micro-F1 et Context Recall | S3 / S4 | ⏳ |
+| 🟧 Should | US-09 | Tracing par étape | Latence de chaque étape dans l'événement `done` | S3 / S4 | ⏳ |
+| 🟧 Should | US-18 | Masquage PII / IOC | 10 cas de test, aucune IP interne envoyée | S4 | ⏳ |
+| 🟧 Should | US-20 | Plan de protection priorisé | Précision@5 des mitigations ≥ 70 % | S4 | ⏳ |
+| 🟦 Could | US-12 | Kubernetes | Ingress SSE, HPA, Secrets | S7 | ⏳ |
+| 🟦 Could | US-19 | Carte ATT&CK colorée | 15 tactiques, clic = Source Drawer | S5 | ⏳ |
+| 🟦 Could | US-10 | Cache sémantique Redis | Réponse < 50 ms si cosinus > 0,95 | — | ⏳ |
+| 🟦 Could | US-13 | Routage agentique | Choix automatique de l'outil | — | ⏳ |
+
+---
+
+## 4. Détail des critères d'acceptation
+
+
+### Must Have (livraison S7)
 
 | ID | User Story | Critères d'acceptation (DoD) | Séance |
 | :-: | :--- | :--- | :-: |
@@ -19,7 +116,7 @@
 | **US-07** | **Qualité et CI/CD.** En tant que Lead Developer, je veux que chaque push lance lint, typage et tests sans coût. | Pytest + AsyncMock (LLM, Qdrant, PostgreSQL), **aucun appel réseau, suite < 3 s, couverture ≥ 80 %**. Ruff + Mypy + gitleaks dans GitHub Actions, CI verte bloquante sur `main`. | S6 |
 | **US-08** | **Conteneurisation de production.** En tant qu'ingénieur DevOps, je veux lancer toute la pile en une commande, de façon sécurisée. | Dockerfiles multi-stage, **image backend < 350 Mo** (ONNX, sans PyTorch), USER 10001. `docker-compose.prod.yml` avec healthchecks. Secrets injectés uniquement par variables d'environnement. | S7 |
 
-## 2. SHOULD HAVE (forte valeur, après le socle)
+### Should Have (forte valeur, après le socle)
 
 | ID | User Story | Critères d'acceptation | Séance |
 | :-: | :--- | :--- | :-: |
@@ -31,7 +128,7 @@
 | **US-20** | **Plan de protection priorisé (bloquer / détecter / corriger).** En tant qu'analyste SOC, je veux savoir quoi faire en priorité après l'analyse d'un rapport. | Mitigations classées par couverture pondérée : score(m) = Σ confiance(t) pour chaque technique détectée t que m atténue (relations `mitigates`). Trois volets : *Bloquer* (mitigations ATT&CK), *Détecter* (detection strategies / analytics), *Corriger* (mitigations CWE, parseur XML étendu). Chaque recommandation affiche sa justification (« couvre 3 techniques sur 4 ») et sa citation. **Aucun modèle entraîné, aucune action exécutée automatiquement.** Évaluation : précision@5 des mitigations proposées contre les `mitigates` des techniques de vérité (cti-ate), contrôle sur les questions « mitigation » de cti-mcq. | S4 |
 | **US-18** | **Masquage PII / IOC.** En tant que RSSI, je veux qu'aucune donnée interne ne parte vers le LLM cloud. | IP, FQDN internes et e-mails remplacés par des jetons avant l'appel. Tests unitaires sur 10 cas. | S4 |
 
-## 3. COULD HAVE (différenciateurs M2)
+### Could Have (différenciateurs M2)
 
 | ID | User Story | Critères d'acceptation |
 | :-: | :--- | :--- |
@@ -40,7 +137,7 @@
 | **US-10** | **Cache sémantique Redis** | Similarité cosinus > 0,95 → réponse en < 50 ms, invalidation configurable. |
 | **US-13** | **Routage agentique** | Router entre recherche documentaire, lookup exact d'un identifiant et requête SQL d'historique. |
 
-## 4. WON'T HAVE (hors périmètre)
+### Won't Have (hors périmètre)
 
 - Fine-tuning ou pré-entraînement d'un LLM.
 - Ingestion de PDF de rapports multimodaux (images, schémas).
