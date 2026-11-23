@@ -30,7 +30,7 @@
 
 #### 2.2 Proposition de valeur
 
-À partir d'un rapport collé (FR ou EN), ThreatLens renvoie en streaming les techniques ATT&CK (badges `T####`), la faiblesse CWE et les mitigations. **Chaque assertion porte une citation cliquable** (Source Drawer : fiche d'origine, `stix_id`, score). Une carte ATT&CK colorée résume le rapport. Le gain se mesure sur le Golden Dataset CTIBench, face à une baseline « LLM sans RAG ».
+À partir d'un rapport collé (FR ou EN), ThreatLens renvoie en streaming les techniques ATT&CK (badges `T####`), la faiblesse CWE et les mitigations. **Chaque assertion porte une citation cliquable** (Source Drawer : fiche d'origine, `stix_id`, score). Une carte ATT&CK colorée résume le rapport. En sortie, ThreatLens propose un **plan de protection priorisé** en trois volets (*bloquer*, *détecter*, *corriger*). Il est construit à partir des relations expertes de MITRE (1 477 relations `mitigates`, 706 detection strategies *(mesuré)*), classé par couverture des techniques détectées, et chaque recommandation est citée. L'analyste reste décisionnaire. Le gain se mesure sur le Golden Dataset CTIBench, face à une baseline « LLM sans RAG ».
 
 ---
 
@@ -66,6 +66,7 @@
   - *Justification :* dense et sparse dans la même collection, fusion RRF native, filtrage par payload (`category`, `tactics`, `platforms`) intégré au parcours HNSW, un seul conteneur léger.
 - **Reranker (Cross-Encoder) :** `BAAI/bge-reranker-base` (imposé), Top-20 → Top-5.
 - **Expansion GraphRAG :** relations STIX `uses`, `mitigates`, `subtechnique-of` stockées dans PostgreSQL, 1 saut après le reranking.
+- **Plan de protection (US-20) :** classement déterministe et explicable des mitigations : score(m) = Σ confiance(t) sur les techniques détectées t que m atténue. Les detection strategies servent pour « détecter », les mitigations CWE pour « corriger ». Le LLM rédige le plan à partir de ce classement, avec citations. Pas de modèle de recommandation entraîné : aucune donnée étiquetée publique fiable n'existe pour en entraîner un.
 - **LLM de génération :** **Groq** (API compatible OpenAI, TTFT faible, bon niveau en français), avec **Ollama** en secours local hors-ligne. Le modèle exact sera figé en S4.
 
 ---
@@ -80,6 +81,7 @@
 | **MRR** | Rang moyen inverse de la bonne fiche | ≥ 0,60 |
 | **Accuracy CVE → CWE** | Réponse finale = CWE de vérité ; à comparer à la **baseline majoritaire (toujours CWE-79) = 22,9 %** *(mesuré)* et au LLM sans RAG | > LLM sans RAG, sur 2021 et 2024 |
 | **Micro-F1 rapport → techniques** | cti-ate, 47 lignes Enterprise, au niveau technique parent, **entité source exclue du corpus** (anti-fuite) | > LLM sans RAG |
+| **Précision@5 du plan de protection** | Mitigations proposées ∈ mitigations ATT&CK des techniques de vérité (cti-ate) | ≥ 70 % |
 | **Faithfulness (Ragas)** | Assertions soutenues par le contexte | ≥ 0,85 |
 | **Answer Relevance (Ragas)** | Adéquation à la question | ≥ 0,80 |
 | **Context Recall (Ragas)** | Le contexte couvre la vérité | ≥ 0,80 |
