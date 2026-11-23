@@ -1,0 +1,31 @@
+{
+  "collection": "threatlens_kb",
+  "sources": {
+    "enterprise-attack-20.1.json": "mitre-attack-enterprise v20.1",
+    "stix-capec.json": "capec v3.9",
+    "cwec_v5.0.xml": "cwe v5.0"
+  },
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "sparse_model": "Qdrant/bm25",
+  "max_words": 300,
+  "documents": 20977,
+  "chunks": 21047,
+  "documents_split": 69,
+  "chunks_by_category": {
+    "campaign": 57,
+    "mitigation": 58,
+    "group": 178,
+    "software": 842,
+    "technique": 750,
+    "procedure": 17636,
+    "capec": 558,
+    "cwe": 968
+  },
+  "points_in_collection": 21047,
+  "total_seconds": 2249.7,
+  "points": 21047,
+  "batches": 329,
+  "embed_seconds": 2094.1,
+  "upsert_ms_p50": 318.1,
+  "upsert_ms_p95": 905.1
+}

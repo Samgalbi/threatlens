@@ -1,0 +1,47 @@
+{
+  "enterprise-attack-20.1.json": {
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-20.1.json",
+    "sha256": "539a843a7b53ed9749740b2123dddae3726b1a4831841c32aca740b011b910b5",
+    "bytes": 55277605,
+    "downloaded_at": "2026-11-23T12:45:31+00:00"
+  },
+  "stix-capec.json": {
+    "url": "https://raw.githubusercontent.com/mitre/cti/master/capec/2.1/stix-capec.json",
+    "sha256": "ee6244f48259c1963d0507535e1843d67ba08fe58b4dfe351c1b74f9e376fa69",
+    "bytes": 4480297,
+    "downloaded_at": "2026-11-23T12:45:34+00:00"
+  },
+  "ctibench/cti-rcm.tsv": {
+    "url": "https://raw.githubusercontent.com/xashru/cti-bench/main/data/cti-rcm.tsv",
+    "sha256": "ed7d7fa79fc912c627f96e229eaa38b3c4b6be813d834d434580be6d4703d700",
+    "bytes": 990921,
+    "downloaded_at": "2026-11-23T12:45:35+00:00"
+  },
+  "ctibench/cti-rcm-2021.tsv": {
+    "url": "https://raw.githubusercontent.com/xashru/cti-bench/main/data/cti-rcm-2021.tsv",
+    "sha256": "a1fc5348b4bc181778dd98055f267b584755215580dd8a18896134e2670d43d3",
+    "bytes": 830612,
+    "downloaded_at": "2026-11-23T12:45:36+00:00"
+  },
+  "ctibench/cti-ate.tsv": {
+    "url": "https://raw.githubusercontent.com/xashru/cti-bench/main/data/cti-ate.tsv",
+    "sha256": "79e5354a5c6aae0c979389786853e768201f8d129fb0f0ca5af392555f238f28",
+    "bytes": 461971,
+    "downloaded_at": "2026-11-23T12:45:37+00:00"
+  },
+  "ctibench/cti-mcq.tsv": {
+    "url": "https://raw.githubusercontent.com/xashru/cti-bench/main/data/cti-mcq.tsv",
+    "sha256": "11e0af8db2dae9706c6e79901d2390bcdf9746e8feccbd9ba10682df649bcc6a",
+    "bytes": 2394094,
+    "downloaded_at": "2026-11-23T12:45:39+00:00"
+  },
+  "cwec_latest.xml.zip": {
+    "url": "https://cwe.mitre.org/data/xml/cwec_latest.xml.zip",
+    "sha256": "bcda44c9abf61ff977f50c3c6649eea5a97a7b0626b0396c2c3ec4bfb973a3dc",
+    "bytes": 2119263,
+    "downloaded_at": "2026-11-23T12:45:49+00:00",
+    "extracted": [
+      "cwe/cwec_v5.0.xml"
+    ]
+  }
+}
