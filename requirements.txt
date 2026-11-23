@@ -1,0 +1,6 @@
+# Runtime dependencies (S2 ingestion). Pinned for reproducibility.
+qdrant-client==1.18.0
+fastembed==0.9.1
+pydantic==2.13.5
+pydantic-settings==2.16.3
+python-dotenv==1.2.3
