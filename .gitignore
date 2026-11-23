@@ -6,6 +6,9 @@
 *.key
 secrets/
 
+# --- Local notes (assistant context, never published) ---
+CLAUDE.md
+
 # --- Python ---
 __pycache__/
 *.py[cod]
