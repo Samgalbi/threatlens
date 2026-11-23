@@ -54,7 +54,9 @@ def collect_documents(raw_dir: Path) -> tuple[list[SourceDocument], dict[str, st
         except (OSError, ValueError) as exc:
             logger.error("CAPEC parse failed for %s: %s", path, exc)
 
-    for path in sorted(raw_dir.glob("**/cwec*.xml")):
+    # Non-recursive on purpose: a recursive glob would also pick up data/raw/sample/.
+    cwe_paths = {*raw_dir.glob("cwe/cwec*.xml"), *raw_dir.glob("cwec*.xml")}
+    for path in sorted(cwe_paths):
         try:
             parsed = list(parse_cwe(path))
             docs += parsed
