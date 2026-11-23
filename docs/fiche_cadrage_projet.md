@@ -59,7 +59,7 @@
   - Découpage aux frontières de phrase **seulement au-delà de 300 mots** (limite de 512 tokens du modèle) : 69 documents sur 20 977 sont concernés *(mesuré)*.
   - Les procedure examples sont des chunks à part : ce sont les phrases les plus proches d'un rapport réel.
   - Nettoyage : suppression des `(Citation: …)`, des liens markdown et des balises HTML.
-  - *Benchmark S2 → S3 :* 300 mots (20 079 chunks) contre 120 mots (20 867 chunks, 630 documents découpés) *(mesuré)*, Recall@5 sur 10 questions.
+  - *Benchmark S2 → S3 :* mesure initiale **hors CWE** : 300 mots (20 079 chunks) contre 120 mots (20 867 chunks, 630 documents découpés) *(mesuré)*. Le benchmark complet avec CWE (Recall@5 sur 10 questions) est un livrable de S3.
 - **Modèle d'embeddings :** `BAAI/bge-small-en-v1.5` (dimension 384), via **fastembed / ONNX Runtime sur CPU, sans PyTorch**. Raison : machine sans GPU et image Docker < 350 Mo exigée en S7.
   - Rapports en français : une étape de **réécriture de requête FR → EN** par le LLM, qui conserve les identifiants extraits par regex. Elle sera comparée à un modèle multilingue sur un sous-ensemble traduit de cti-rcm.
 - **Recherche lexicale :** BM25 sparse calculé par fastembed (`Qdrant/bm25`), IDF appliquée côté Qdrant, fusion **RRF** côté serveur (Query API, `prefetch`).
